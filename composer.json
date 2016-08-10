@@ -1,0 +1,48 @@
+{
+    "name": "travoltron/cashier-extras",
+    "description": "Adding the missing features to the fantastic Laravel Cashier package",
+    "type": "library",
+    "keywords": [
+        ":vendor",
+        ":package_name"
+    ],
+    "homepage": "https://github.com/:vendor/:package_name",
+    "license": "MIT",
+    "authors": [{
+        "name": "Ben Warburton",
+        "email": "ben@travoltron.com",
+        "homepage": "https://github.com/travoltron/cashier-extras",
+        "role": "Developer"
+    }],
+    "require": {
+        "stripe/stripe-php": "^3.20"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.5",
+        "scrutinizer/ocular": "~1.1",
+        "squizlabs/php_codesniffer": "~2.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Travoltron\\CashierExtras\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Travoltron\\CashierExtras\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "format": "phpcbf --standard=psr2 src/"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

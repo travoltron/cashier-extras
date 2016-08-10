@@ -3,10 +3,10 @@
     "description": "Adding the missing features to the fantastic Laravel Cashier package",
     "type": "library",
     "keywords": [
-        ":vendor",
-        ":package_name"
+        "travoltron",
+        "cashier-extras"
     ],
-    "homepage": "https://github.com/:vendor/:package_name",
+    "homepage": "https://github.com/travoltron/cashier-extras",
     "license": "MIT",
     "authors": [{
         "name": "Ben Warburton",

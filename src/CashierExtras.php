@@ -8,6 +8,7 @@ class CashierExtrasServiceProvider extends ServiceProvider
 {
     protected $commands = [
         'Travoltron\CashierExtras\Commands\CreateCoupon',
+        'Travoltron\CashierExtras\Commands\MakeTestable',
         // 'Travoltron\CashierExtras\Commands\FooCommand',
         // 'Travoltron\CashierExtras\Commands\BarCommand',
     ];
@@ -22,14 +23,10 @@ class CashierExtrasServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any package services.
-     *
      * @return void
      */
     public function register()
     {
-        $this->app->bind('plaid',function($app){
-            return new Plaid($app);
-        });
+        // 
     }
 }

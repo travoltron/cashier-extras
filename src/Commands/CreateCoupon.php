@@ -2,7 +2,10 @@
 
 namespace Travoltron\CashierExtras\Commands;
 
+use InvalidArgumentException;
 use Illuminate\Console\Command;
+use Stripe\Coupon as StripeCoupon;
+use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
 
 class CreateCoupon extends Command
 {
@@ -37,6 +40,6 @@ class CreateCoupon extends Command
      */
     public function handle()
     {
-        // 
+        
     }
 }

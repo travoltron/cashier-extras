@@ -64,7 +64,7 @@ class MakeTestable extends Command
             return;
         }
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(env('STRIPE_TEST_KEY'));
+        Stripe::setApiKey(env('STRIPE_TEST_SECRET'));
         StripePlan::create([
             'amount' => 1000,
             'interval' => 'month',
@@ -82,6 +82,7 @@ class MakeTestable extends Command
         StripeCoupon::create([
             'amount_off' => 500,
             'duration' => 'once',
+            'currency' => 'usd',
             'id' => 'coupon-1'
         ]);
         $this->info('Successfully created plans and coupons for testing.');

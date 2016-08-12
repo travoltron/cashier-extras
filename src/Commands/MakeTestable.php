@@ -16,14 +16,14 @@ class MakeTestable extends Command
      *
      * @var string
      */
-    protected $signature = 'stripe:testData';
+    protected $signature = 'stripe:test-data';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Add dummy data to test Cashier';
+    protected $description = 'Create needed Stripe data for testing Cashier';
 
     /**
      * Create a new command instance.
@@ -68,14 +68,14 @@ class MakeTestable extends Command
         StripePlan::create([
             'amount' => 1000,
             'interval' => 'month',
-            'name' => 'Test 01',
+            'name' => 'monthly-10-1',
             'currency' => 'usd',
             'id' => 'monthly-10-1'
         ]);
         StripePlan::create([
             'amount' => 1000,
             'interval' => 'month',
-            'name' => 'Test 02',
+            'name' => 'monthly-10-2',
             'currency' => 'usd',
             'id' => 'monthly-10-2'
         ]);

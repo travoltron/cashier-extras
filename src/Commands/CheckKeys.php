@@ -65,9 +65,17 @@ class CreateCoupon extends Command
             $valid['test'] = false;
             $this->error('Stripe test keys are incorrectly set.');
         }
+        if (stristr(env('STRIPE_TEST_KEY'), '_test_') !== false && stristr(env('STRIPE_TEST_SECRET'), '_test_') !== false) {
+            $valid['test'] = false;
+            $this->info('Stripe test keys are correctly set.');
+        }
         if (stristr(env('STRIPE_KEY'), '_live_') === false && stristr(env('STRIPE_SECRET'), '_live_') === false) {
             $valid['live'] = false;
             $this->error('Stripe live keys are incorrectly set.');
+        }
+        if (stristr(env('STRIPE_KEY'), '_live_') !== false && stristr(env('STRIPE_SECRET'), '_live_') !== false) {
+            $valid['live'] = false;
+            $this->info('Stripe live keys are correctly set.');
         }
         return $valid;
     }

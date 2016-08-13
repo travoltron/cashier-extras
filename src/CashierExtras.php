@@ -9,7 +9,7 @@ class CashierExtrasServiceProvider extends ServiceProvider
     protected $commands = [
         'Travoltron\CashierExtras\Commands\CreateCoupon',
         'Travoltron\CashierExtras\Commands\MakeTestable',
-        // 'Travoltron\CashierExtras\Commands\FooCommand',
+        'Travoltron\CashierExtras\Commands\CheckKeys',
         // 'Travoltron\CashierExtras\Commands\BarCommand',
     ];
     /**

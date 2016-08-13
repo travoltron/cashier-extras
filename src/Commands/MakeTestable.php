@@ -16,7 +16,7 @@ class MakeTestable extends Command
      *
      * @var string
      */
-    protected $signature = 'stripe:test-data';
+    protected $signature = 'cashier:test-data';
 
     /**
      * The console command description.

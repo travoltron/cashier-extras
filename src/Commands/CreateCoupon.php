@@ -88,7 +88,7 @@ class CreateCoupon extends Command
         $data['duration'] = strtolower($duration);
         $data['max_redemptions'] = $this->ask('How many times can this coupon be used? (numeric)');
         $data['redeem_by'] = Carbon::parse($this->ask('When does this coupon expire? (MM-DD-YYYY)'))->timestamp;
-
+        
         StripeCoupon::create($data);
         $this->info('Successfully created coupon.');
         return;

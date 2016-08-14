@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use InvalidArgumentException;
 use Illuminate\Console\Command;
 use Stripe\Plan as StripePlan;
+use Illuminate\Support\Facades\Artisan;
 use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
 
 class CreatePlan extends Command

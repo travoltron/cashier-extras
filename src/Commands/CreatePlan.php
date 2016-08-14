@@ -76,7 +76,7 @@ class CreatePlan extends Command
         $data['name'] = $name;
         $data['id'] = str_slug($name);
         $amount = $this->ask('How much does this plan cost?');
-        $data['amount'] = (stristr($amount, '.'))?$amount * 100:$amount;
+        $data['amount'] = (strpos($amount, '.'))?$amount * 100:$amount;
         $data['currency'] = $this->ask('Currency code:', 'usd');
         $data['interval'] = $this->choice('How frequently does this plan bill?', ['day', 'week', 'month', 'year']);
         $data['interval_count'] = $this->ask('How many intervals are between billing cycles? (eg: 15 days, 3 months)', 1);

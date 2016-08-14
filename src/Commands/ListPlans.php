@@ -9,7 +9,7 @@ use Stripe\Plan as StripePlan;
 use Illuminate\Console\Command;
 use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
 
-class CreatePlan extends Command
+class ListPlans extends Command
 {
     /**
      * The name and signature of the console command.

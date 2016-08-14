@@ -9,7 +9,7 @@ use Stripe\Coupon as StripeCoupon;
 use Illuminate\Console\Command;
 use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
 
-class CreatePlan extends Command
+class ListCoupons extends Command
 {
     /**
      * The name and signature of the console command.

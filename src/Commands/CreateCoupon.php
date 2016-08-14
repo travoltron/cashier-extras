@@ -74,10 +74,10 @@ class CreateCoupon extends Command
         Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
         $type = $this->choice('Discount type', ['Percentage', 'Fixed Amount']);
         if ($type == 'Percentage') {
-            $data['percent_off'] = $this->ask('Percentage discount:');
+            $data['percent_off'] = $this->ask('Percentage discount');
         }
         if ($type == 'Fixed Amount') {
-            $data['amount_off'] = $this->ask('Discount amount:');
+            $data['amount_off'] = $this->ask('Discount amount');
             $data['currency'] = $this->ask('Currency code:', 'usd');
         }
         $duration = $this->choice('How long should this coupon work?', ['Forever', 'Once', 'Repeating']);
@@ -90,7 +90,7 @@ class CreateCoupon extends Command
         $data['redeem_by'] = Carbon::parse($this->ask('When does this coupon expire? (MM-DD-YYYY)'))->timestamp;
 
         StripeCoupon::create($data);
-        $this->info('Successfully created plans and coupons for testing.');
+        $this->info('Successfully created coupon.');
         return;
     }
 }

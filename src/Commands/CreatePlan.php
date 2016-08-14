@@ -86,14 +86,14 @@ class CreatePlan extends Command
         $this->comment('Name: '.$data['name']);
         $this->comment('ID: '.$data['id']);
         $this->comment('Amount: '.$data['amount'].' ('.strtoupper($data['currency']).')');
-        $this->comment('Bills every '.$data['interval_count'].' '.str_plural($data['interval'], $data['interval_count']).'.');
+        $this->comment('Bills every'.($data['interval_count'] == 1)?'':' '.$data['interval_count'].' '.str_plural($data['interval'], $data['interval_count']).'.');
         $this->comment(($data['trial_period_days'] == 0)?'There is no trial period for this plan.':'Trial period lasts for '.$data['trial_period_days'].' days.');
         $this->comment('Appears on statement as: '.$data['statement_descriptor']);
 
         if ($this->confirm('Does this look right to you? [y|N]')) {
             StripePlan::create($data);
         }
-        $this->info('Successfully created plans and coupons for testing.');
+        $this->info('Successfully created plans.');
         return;
     }
 }

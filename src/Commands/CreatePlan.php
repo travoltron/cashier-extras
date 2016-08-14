@@ -4,9 +4,8 @@ namespace Travoltron\CashierExtras\Commands;
 
 use Carbon\Carbon;
 use InvalidArgumentException;
-use Illuminate\Console\Command;
 use Stripe\Plan as StripePlan;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Console\Command;
 use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
 
 class CreatePlan extends Command
@@ -44,7 +43,30 @@ class CreatePlan extends Command
     {
         $this->info('Creating a new plan at Stripe');
         // Check that the keys are set
-        $validKeys = Artisan::call('stripe:check-keys');
+        $valid = [
+            'test' => true,
+            'live' => true
+        ];
+        // Check that the keys are set correctly
+        if (stristr(env('STRIPE_TEST_KEY'), '_test_') === false && stristr(env('STRIPE_TEST_SECRET'), '_test_') === false) {
+            $valid['test'] = false;
+            $this->error('Stripe test keys are incorrectly set.');
+        }
+        if (stristr(env('STRIPE_TEST_KEY'), '_test_') !== false && stristr(env('STRIPE_TEST_SECRET'), '_test_') !== false) {
+            $valid['test'] = false;
+            $this->info('Stripe test keys are correctly set.');
+        }
+        if (stristr(env('STRIPE_KEY'), '_live_') === false && stristr(env('STRIPE_SECRET'), '_live_') === false) {
+            $valid['live'] = false;
+            $this->error('Stripe live keys are incorrectly set.');
+        }
+        if (stristr(env('STRIPE_KEY'), '_live_') !== false && stristr(env('STRIPE_SECRET'), '_live_') !== false) {
+            $valid['live'] = false;
+            $this->info('Stripe live keys are correctly set.');
+        }
+        $envs = collect($valid)->filter(function($val, $key) {
+            return $val === true;
+        })->toArray();
         $envs = collect($validKeys)->filter(function($val, $key) {
             return $val === true;
         });

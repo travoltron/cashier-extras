@@ -5,7 +5,6 @@ namespace Travoltron\CashierExtras\Commands;
 use InvalidArgumentException;
 use Illuminate\Console\Command;
 
-
 class CheckKeys extends Command
 {
     /**

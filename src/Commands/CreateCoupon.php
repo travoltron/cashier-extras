@@ -4,6 +4,7 @@ namespace Travoltron\CashierExtras\Commands;
 
 use Carbon\Carbon;
 use InvalidArgumentException;
+use Stripe\Stripe as Stripe;
 use Illuminate\Console\Command;
 use Stripe\Coupon as StripeCoupon;
 use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
@@ -62,22 +63,25 @@ class CreateCoupon extends Command
         if (stristr(env('STRIPE_KEY'), '_live_') !== false && stristr(env('STRIPE_SECRET'), '_live_') !== false) {
             $this->info('Stripe live keys are correctly set.');
         }
-        $envs = collect($valid)->filter(function($val, $key) { return $val === true; })->keys()->map(function($keys) { return ucfirst($keys); })->toArray();
+        $envs = collect($valid)->filter(function ($val, $key) {
+            return $val === true;
+        })->keys()->map(function ($keys) {
+            return ucfirst($keys);
+        })->toArray();
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
         Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
         $type = $this->choice('Discount type', ['Percentage', 'Fixed Amount']);
-        if($type == 'Percentage') {
+        if ($type == 'Percentage') {
             $data['percent_off'] = $this->ask('Percentage discount:');
         }
-        if($type == 'Fixed Amount') {
+        if ($type == 'Fixed Amount') {
             $data['amount_off'] = $this->ask('Discount amount:');
             $data['currency'] = $this->ask('Currency code:', 'usd');
-
         }
         $duration = $this->choice('How long should this coupon work?', ['Forever', 'Once', 'Repeating']);
-        if($duration == 'Repeating') {
+        if ($duration == 'Repeating') {
             $data['duration_in_months'] = $this->ask('How many months should this work for? (numeric)');
         }
         $data['id'] = $this->ask('What is the coupon code to use? (ex. FALLSALE50)');

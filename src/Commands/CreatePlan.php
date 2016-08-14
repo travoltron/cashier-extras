@@ -4,6 +4,7 @@ namespace Travoltron\CashierExtras\Commands;
 
 use Carbon\Carbon;
 use InvalidArgumentException;
+use Stripe\Stripe as Stripe;
 use Stripe\Plan as StripePlan;
 use Illuminate\Console\Command;
 use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
@@ -62,7 +63,11 @@ class CreatePlan extends Command
         if (stristr(env('STRIPE_KEY'), '_live_') !== false && stristr(env('STRIPE_SECRET'), '_live_') !== false) {
             $this->info('Stripe live keys are correctly set.');
         }
-        $envs = collect($valid)->filter(function($val, $key) { return $val === true; })->keys()->map(function($keys) { return ucfirst($keys); })->toArray();
+        $envs = collect($valid)->filter(function ($val, $key) {
+            return $val === true;
+        })->keys()->map(function ($keys) {
+            return ucfirst($keys);
+        })->toArray();
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct

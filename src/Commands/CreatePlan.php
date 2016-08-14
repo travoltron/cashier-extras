@@ -76,7 +76,7 @@ class CreatePlan extends Command
         $data['name'] = $name;
         $data['id'] = str_slug($name);
         $amount = $this->ask('How much does this plan cost?');
-        $data['amount'] = (strpos($amount, '.') === false)?$amount * 100:$amount;
+        $data['amount'] = $amount * 100;
         $data['currency'] = $this->ask('Currency code:', 'usd');
         $data['interval'] = $this->choice('How frequently does this plan bill?', ['day', 'week', 'month', 'year']);
         $data['interval_count'] = $this->ask('How many intervals are between billing cycles? (eg: 15 days, 3 months)', 1);
@@ -85,14 +85,14 @@ class CreatePlan extends Command
         $this->comment('Plan details:');
         $this->comment('Name: '.$data['name']);
         $this->comment('ID: '.$data['id']);
-        $this->comment('Amount: $'.number_format(($data['amount']/100), 2, '.', '').' ('.strtoupper($data['currency']).')');
+        $this->comment('Amount: $'.sprintf("%.2f", $data['amount']).' ('.strtoupper($data['currency']).')');
         $this->comment($data['interval_count'] == 1?'Bills every '.$data['interval'].'.':'Bills every '.$data['interval_count'].' '.str_plural($data['interval']).'.');
         $this->comment(($data['trial_period_days'] == 0)?'There is no trial period for this plan.':'Trial period lasts for '.$data['trial_period_days'].' days.');
         $this->comment('Appears on statement as: '.$data['statement_descriptor']);
 
         if ($this->confirm('Does this look right to you?')) {
             StripePlan::create($data);
-            $this->info('Successfully created plans.');
+            $this->info('Successfully created plan.');
         } else {
             $this->error('Plan creation cancelled.');
         }

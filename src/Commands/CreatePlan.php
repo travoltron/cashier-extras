@@ -51,25 +51,27 @@ class CreatePlan extends Command
 
         // Test keys are set and appear to be correct
         Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
-        $type = $this->ask('Discount type', ['Percentage', 'Fixed Amount']);
-        if($type == 'Percentage') {
-            $data['percent_off'] = $this->ask('Percentage discount:');
-        }
-        if($type == 'Fixed Amount') {
-            $data['amount_off'] = $this->ask('Discount amount:');
-            $data['currency'] = $this->ask('Currency code:', 'usd');
+        $name = ($this->ask('What is the name of this plan?'));
+        $data['name'] = $name;
+        $data['id'] = str_slug($name);
+        $amount = $this->ask('How much does this plan cost?');
+        $data['amount'] = (stristr($amount, '.'))?$amount * 100:$amount;
+        $data['currency'] = $this->ask('Currency code:', 'usd');
+        $data['interval'] = $this->choice('How frequently does this plan bill?', ['day', 'week', 'month', 'year']);
+        $data['interval_count'] = $this->ask('How many intervals are between billing cycles? (eg: 15 days, 3 months)', 1);
+        $data['statement_descriptor'] = $this->ask('How should this show up on a billing statement? (22 character max)');
+        $data['trial_period_days'] = $this->ask('If there is a trial period, how many days?', 0);
+        $this->comment('Plan details:');
+        $this->comment('Name: '.$data['name']);
+        $this->comment('ID: '.$data['id']);
+        $this->comment('Amount: '.$data['amount'].' ('.strtoupper($data['currency']).')');
+        $this->comment('Bills every '.$data['interval_count'].' '.str_plural($data['interval'], $data['interval_count']).'.');
+        $this->comment(($data['trial_period_days'] == 0)?'There is no trial period for this plan.':'Trial period lasts for '.$data['trial_period_days'].' days.');
+        $this->comment('Appears on statement as: '.$data['statement_descriptor']);
 
+        if ($this->confirm('Does this look right to you? [y|N]')) {
+            StripePlan::create($data);
         }
-        $duration = $this->choice('How long should this coupon work?', ['Forever', 'Once', 'Repeating']);
-        if($duration == 'Repeating') {
-            $data['duration_in_months'] = $this->ask('How many months should this work for? (numeric)');
-        }
-        $data['id'] = $this->ask('What is the coupon code to use? (ex. FALLSALE50)');
-        $data['duration'] = strtolower($duration);
-        $data['max_redemptions'] = $this->ask('How many times can this coupon be used? (numeric)');
-        $data['redeem_by'] = Carbon::parse($this->ask('When does this coupon expire? (MM-DD-YYYY)'))->timestamp;
-
-        StripeCoupon::create($data);
         $this->info('Successfully created plans and coupons for testing.');
         return;
     }

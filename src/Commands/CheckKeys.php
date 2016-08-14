@@ -44,29 +44,29 @@ class CreateCoupon extends Command
             'test' => true,
             'live' => true
         ];
-        if (!env('STRIPE_TEST_KEY')) {
-            $valid['test'] = false;
-            $this->error('Make sure to set \'STRIPE_TEST_KEY\' in your .env file!');
-        }
-        if (!env('STRIPE_TEST_SECRET')) {
-            $valid['test'] = false;
-            $this->error('Make sure to set \'STRIPE_TEST_SECRET\' in your .env file!');
-        }
-        if (!env('STRIPE_KEY')) {
-            $valid['live'] = false;
-            $this->error('Make sure to set \'STRIPE_KEY\' in your .env file!');
-        }
-        if (!env('STRIPE_SECRET')) {
-            $valid['live'] = false;
-            $this->error('Make sure to set \'STRIPE_SECRET\' in your .env file!');
-        }
         // Check that the keys are set correctly
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') === false && stristr(env('STRIPE_TEST_SECRET'), '_test_') === false) {
             $valid['test'] = false;
+            if (!env('STRIPE_TEST_KEY')) {
+                $valid['test'] = false;
+                $this->error('Make sure to set \'STRIPE_TEST_KEY\' in your .env file!');
+            }
+            if (!env('STRIPE_TEST_SECRET')) {
+                $valid['test'] = false;
+                $this->error('Make sure to set \'STRIPE_TEST_SECRET\' in your .env file!');
+            }
             $this->error('Stripe test keys are incorrectly set.');
         }
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') !== false && stristr(env('STRIPE_TEST_SECRET'), '_test_') !== false) {
             $valid['test'] = false;
+            if (!env('STRIPE_KEY')) {
+                $valid['live'] = false;
+                $this->error('Make sure to set \'STRIPE_KEY\' in your .env file!');
+            }
+            if (!env('STRIPE_SECRET')) {
+                $valid['live'] = false;
+                $this->error('Make sure to set \'STRIPE_SECRET\' in your .env file!');
+            }
             $this->info('Stripe test keys are correctly set.');
         }
         if (stristr(env('STRIPE_KEY'), '_live_') === false && stristr(env('STRIPE_SECRET'), '_live_') === false) {

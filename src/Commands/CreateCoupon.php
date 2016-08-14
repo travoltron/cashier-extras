@@ -51,7 +51,7 @@ class CreateCoupon extends Command
 
         // Test keys are set and appear to be correct
         Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
-        $type = $this->ask('Discount type', ['Percentage', 'Fixed Amount']);
+        $type = $this->choice('Discount type', ['Percentage', 'Fixed Amount']);
         if($type == 'Percentage') {
             $data['percent_off'] = $this->ask('Percentage discount:');
         }

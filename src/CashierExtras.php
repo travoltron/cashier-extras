@@ -10,7 +10,7 @@ class CashierExtrasServiceProvider extends ServiceProvider
         'Travoltron\CashierExtras\Commands\CreateCoupon',
         'Travoltron\CashierExtras\Commands\MakeTestable',
         'Travoltron\CashierExtras\Commands\CheckKeys',
-        // 'Travoltron\CashierExtras\Commands\BarCommand',
+        'Travoltron\CashierExtras\Commands\CreatePlan',
     ];
     /**
      * Perform post-registration booting of services.

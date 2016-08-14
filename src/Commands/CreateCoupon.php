@@ -53,7 +53,6 @@ class CreateCoupon extends Command
             $this->error('Stripe test keys are incorrectly set.');
         }
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') !== false && stristr(env('STRIPE_TEST_SECRET'), '_test_') !== false) {
-            $valid['test'] = false;
             $this->info('Stripe test keys are correctly set.');
         }
         if (stristr(env('STRIPE_KEY'), '_live_') === false && stristr(env('STRIPE_SECRET'), '_live_') === false) {
@@ -61,12 +60,9 @@ class CreateCoupon extends Command
             $this->error('Stripe live keys are incorrectly set.');
         }
         if (stristr(env('STRIPE_KEY'), '_live_') !== false && stristr(env('STRIPE_SECRET'), '_live_') !== false) {
-            $valid['live'] = false;
             $this->info('Stripe live keys are correctly set.');
         }
-        $envs = collect($valid)->filter(function($val, $key) {
-            return $val === true;
-        })->toArray();
+        $envs = collect($valid)->filter(function($val, $key) { return $val === true; })->keys()->map(function($keys) { return ucfirst($keys); })->toArray();
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct

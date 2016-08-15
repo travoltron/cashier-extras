@@ -85,7 +85,7 @@ class CreatePlan extends Command
         $this->comment('Plan details:');
         $this->comment('Name: '.$data['name']);
         $this->comment('ID: '.$data['id']);
-        $this->comment('Amount: $'.sprintf("%.2f", $data['amount']).' ('.strtoupper($data['currency']).')');
+        $this->comment('Amount: $'.sprintf("%.2f", ($data['amount']/100)).' ('.strtoupper($data['currency']).')');
         $this->comment($data['interval_count'] == 1?'Bills every '.$data['interval'].'.':'Bills every '.$data['interval_count'].' '.str_plural($data['interval']).'.');
         $this->comment(($data['trial_period_days'] == 0)?'There is no trial period for this plan.':'Trial period lasts for '.$data['trial_period_days'].' days.');
         $this->comment('Appears on statement as: '.$data['statement_descriptor']);

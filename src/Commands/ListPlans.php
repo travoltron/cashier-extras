@@ -77,6 +77,23 @@ class ListPlans extends Command
         // Test keys are set and appear to be correct
         Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
         
-        dd(StripePlan::all());
+        $headers = ['ID', 'Name', 'Amount', 'Currency', 'Repeats every', 'Trial length', 'Appears as', 'Created on'];
+        $collection = collect(StripePlan::all()->__toArray(true)['data']);
+        if($collection->isEmpty()) {
+            return $this->info('No plans found.');
+        }
+        $i = 0;
+        foreach($collection as $plan) {
+            $plans[$i]['id'] = $plan['id'];
+            $plans[$i]['name'] = $plan['name'];
+            $plans[$i]['amount'] = money_format('%2n', $plan['amount']/100);
+            $plans[$i]['currency'] = $plan['currency'];
+            $plans[$i]['repeats'] = $plan['interval_count'].' '.str_plural($plan['interval'], $plan['interval_count']);
+            $plans[$i]['trial_period_days'] = $plan['trial_period_days'];
+            $plans[$i]['statement'] = $plan['statement_descriptor'];
+            $plans[$i]['created'] = Carbon::createFromTimestamp($plan['created'])->format('m-d-Y');
+            $i++;
+        }
+        $this->table($headers, $plans);
     }
 }

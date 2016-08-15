@@ -76,7 +76,23 @@ class ListCoupons extends Command
 
         // Test keys are set and appear to be correct
         Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
-        
-        dd(StripeCoupon::all());
+        $headers = ['ID', 'Discount', 'Currency', 'Duration', 'Lasts for ', 'Able to be used', 'Has been used', 'Created on'];
+        $collection = collect(StripeCoupon::all()->__toArray(true)['data']);
+        if($collection->isEmpty()) {
+            return $this->info('No coupons found.');
+        }
+        $i = 0;
+        foreach($collection as $coupon) {
+            $coupons[$i]['id'] = $coupon['id'];
+            $coupons[$i]['discount'] = ($coupon['amount_off'] !== null)?'$'.$coupon['amount_off']/100:$coupon['percent_off'].'%';
+            $coupons[$i]['currency'] = strtoupper($coupon['currency']);
+            $coupons[$i]['duration'] = ucfirst($coupon['duration']);
+            $coupons[$i]['repeats'] = ($coupon['duration_in_months'])?str_plural($coupon['duration_in_months']):'Forever';
+            $coupons[$i]['available'] = $coupon['max_redemptions'];
+            $coupons[$i]['used'] = $coupon['times_redeemed'];
+            $coupons[$i]['created'] = Carbon::createFromTimestamp($coupon['created'])->format('m-d-Y');
+            $i++;
+        }
+        $this->table($headers, $coupons);
     }
 }

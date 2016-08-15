@@ -1,4 +1,4 @@
-# :package_name
+# cashier-extras
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Note:** Replace ```:author_name``` ```:author_username``` ```:author_website``` ```:author_email``` ```:vendor``` ```:package_name``` ```:package_description``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line.
+**Note:** Replace ```Ben Warburton``` ```travoltron``` ```:author_website``` ```:author_email``` ```travoltron``` ```cashier-extras``` ```:package_description``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line.
 
 This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
 PSRs you support to avoid any confusion with users and contributors.
@@ -17,25 +17,105 @@ PSRs you support to avoid any confusion with users and contributors.
 Via Composer
 
 ``` bash
-$ composer require :vendor/:package_name
+$ composer require travoltron/cashier-extras
 ```
+
+Add the following to `config/app.php`:
+
+`Travoltron\CashierExtras\CashierExtrasServiceProvider::class,`
 
 ## Usage
 
-``` php
-$skeleton = new League\Skeleton();
-echo $skeleton->echoPhrase('Hello, League!');
+This package adds a few interactive CLI tools to make working with Stripe and Laravel's Cashier package a little bit easier. For now it supports creating, listing, and deleting both Stripe Plans and Coupons. 
+
+The Laravel Cashier package documentation states that to run it's own suite of tests, some plans and a coupon need to be added to your Stripe account. 
+
+The added commands are as follows:
+
+###Cashier Testing
+
+``` bash
+php artisan cashier:test-data
 ```
+
+This adds the needed plans and coupons for Laravel Cashier testing.
+
+###Check Stripe Keys
+
+``` bash
+php artisan stripe:check-keys
+```
+
+This checks that the `.env` file has been populated with the correct keys and checks at a very loose level that the keys are correctly formatted.
+
+###Stripe Plans
+
+``` bash
+php artisan stripe:list-plans
+```
+
+Displays a table of the plans currently enabled on your Stripe account.
+
+``` bash
+php artisan stripe:make-plan
+```
+
+Interactive wizard to create a plan via the CLI.
+
+``` bash
+php artisan stripe:delete-plan {id}
+```
+
+Deletes a plan with the supplied id. To see this ID, list the plans, and select the value from the first column.
+
+
+###Stripe Coupons
+
+``` bash
+php artisan stripe:list-coupons
+```
+
+Displays a table of the coupons currently enabled on your Stripe account.
+
+``` bash
+php artisan stripe:make-coupon
+```
+
+Interactive wizard to create a coupon via the CLI.
+
+``` bash
+php artisan stripe:delete-coupon {id}
+```
+
+Deletes a coupon with the supplied id. To see this ID, list the coupons, and select the value from the first column.
+
+##Caveats 
+
+By default, the `config/services.php` file has a section for Stripe setup like so:
+
+``` php
+'stripe' => [
+    'model' => App\User::class,
+    'key' => env('STRIPE_KEY'),
+    'secret' => env('STRIPE_SECRET'),
+],
+```
+
+In order to check for the keys being set properly, change this to: 
+``` php
+'stripe' => [
+    'model' => App\User::class,
+    'key' => env('STRIPE_KEY', env('STRIPE_TEST_KEY')),
+    'secret' => env('STRIPE_SECRET', env('STRIPE_TEST_SECRET')),
+],
+```
+
+and add the keys `STRIPE_TEST_KEY` and `STRIPE_TEST_SECRET` to your .env file. 
 
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
-## Testing
-
-``` bash
-$ composer test
-```
 
 ## Contributing
 
@@ -43,28 +123,22 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details
 
 ## Security
 
-If you discover any security related issues, please email :author_email instead of using the issue tracker.
+If you discover any security related issues, please email ben@travoltron.com instead of using the issue tracker.
 
 ## Credits
 
-- [:author_name][link-author]
+- [Ben Warburton][link-author]
 - [All Contributors][link-contributors]
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/:vendor/:package_name.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/travoltron/cashier-extras.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/:vendor/:package_name/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/:vendor/:package_name.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/:vendor/:package_name.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/:vendor/:package_name.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/travoltron/cashier-extras.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/:vendor/:package_name
-[link-travis]: https://travis-ci.org/:vendor/:package_name
-[link-scrutinizer]: https://scrutinizer-ci.com/g/:vendor/:package_name/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/:vendor/:package_name
-[link-downloads]: https://packagist.org/packages/:vendor/:package_name
-[link-author]: https://github.com/:author_username
+[link-packagist]: https://packagist.org/packages/travoltron/cashier-extras
+[link-downloads]: https://packagist.org/packages/travoltron/cashier-extras
+[link-author]: https://github.com/travoltron
 [link-contributors]: ../../contributors

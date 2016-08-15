@@ -74,7 +74,7 @@ class DeleteCoupon extends Command
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
+        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
         // Delete the plan
         StripeCoupon::retrieve($this->argument('id'))->delete();
         // Show the table

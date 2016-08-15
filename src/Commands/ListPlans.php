@@ -75,7 +75,7 @@ class ListPlans extends Command
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
+        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
         
         $headers = ['ID', 'Name', 'Amount', 'Currency', 'Repeats every', 'Trial length', 'Appears as', 'Created on'];
         $collection = collect(StripePlan::all()->__toArray(true)['data']);

@@ -71,7 +71,7 @@ class CreatePlan extends Command
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
+        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
         $name = ($this->ask('What is the name of this plan?'));
         $data['name'] = $name;
         $data['id'] = str_slug($name);

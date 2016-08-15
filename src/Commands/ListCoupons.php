@@ -75,7 +75,7 @@ class ListCoupons extends Command
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 0)?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
+        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
         $headers = ['ID', 'Discount', 'Currency', 'Duration', 'Lasts for ', 'Able to be used', 'Has been used', 'Created on'];
         $collection = collect(StripeCoupon::all()->__toArray(true)['data']);
         if($collection->isEmpty()) {

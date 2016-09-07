@@ -2,12 +2,9 @@
 
 namespace Travoltron\CashierExtras\Commands;
 
-use Carbon\Carbon;
-use InvalidArgumentException;
-use Stripe\Stripe as Stripe;
-use Stripe\Plan as StripePlan;
 use Illuminate\Console\Command;
-use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
+use Stripe\Plan as StripePlan;
+use Stripe\Stripe as Stripe;
 
 class CreatePlan extends Command
 {
@@ -46,7 +43,7 @@ class CreatePlan extends Command
         // Check that the keys are set
         $valid = [
             'test' => true,
-            'live' => true
+            'live' => true,
         ];
         // Check that the keys are set correctly
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') === false && stristr(env('STRIPE_TEST_SECRET'), '_test_') === false) {
@@ -71,7 +68,7 @@ class CreatePlan extends Command
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
+        Stripe::setApiKey(($env == 'Test') ? env('STRIPE_TEST_SECRET') : env('STRIPE_SECRET'));
         $name = ($this->ask('What is the name of this plan?'));
         $data['name'] = $name;
         $data['id'] = str_slug($name);
@@ -85,9 +82,9 @@ class CreatePlan extends Command
         $this->comment('Plan details:');
         $this->comment('Name: '.$data['name']);
         $this->comment('ID: '.$data['id']);
-        $this->comment('Amount: $'.sprintf("%.2f", ($data['amount']/100)).' ('.strtoupper($data['currency']).')');
-        $this->comment($data['interval_count'] == 1?'Bills every '.$data['interval'].'.':'Bills every '.$data['interval_count'].' '.str_plural($data['interval']).'.');
-        $this->comment(($data['trial_period_days'] == 0)?'There is no trial period for this plan.':'Trial period lasts for '.$data['trial_period_days'].' days.');
+        $this->comment('Amount: $'.sprintf('%.2f', ($data['amount'] / 100)).' ('.strtoupper($data['currency']).')');
+        $this->comment($data['interval_count'] == 1 ? 'Bills every '.$data['interval'].'.' : 'Bills every '.$data['interval_count'].' '.str_plural($data['interval']).'.');
+        $this->comment(($data['trial_period_days'] == 0) ? 'There is no trial period for this plan.' : 'Trial period lasts for '.$data['trial_period_days'].' days.');
         $this->comment('Appears on statement as: '.$data['statement_descriptor']);
 
         if ($this->confirm('Does this look right to you?')) {
@@ -96,6 +93,5 @@ class CreatePlan extends Command
         } else {
             $this->error('Plan creation cancelled.');
         }
-        return;
     }
 }

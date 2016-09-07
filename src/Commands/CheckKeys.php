@@ -2,7 +2,6 @@
 
 namespace Travoltron\CashierExtras\Commands;
 
-use InvalidArgumentException;
 use Illuminate\Console\Command;
 
 class CheckKeys extends Command
@@ -40,7 +39,7 @@ class CheckKeys extends Command
     {
         $valid = [
             'test' => true,
-            'live' => true
+            'live' => true,
         ];
         // Check that the keys are set correctly
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') === false && stristr(env('STRIPE_TEST_SECRET'), '_test_') === false) {
@@ -75,6 +74,7 @@ class CheckKeys extends Command
             $valid['live'] = false;
             $this->info('Stripe live keys are correctly set.');
         }
+
         return $valid;
     }
 }

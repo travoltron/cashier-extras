@@ -16,6 +16,7 @@ class CashierExtrasServiceProvider extends ServiceProvider
         'Travoltron\CashierExtras\Commands\ListCoupons',
         'Travoltron\CashierExtras\Commands\DeleteCoupon',
     ];
+
     /**
      * Perform post-registration booting of services.
      *
@@ -31,6 +32,6 @@ class CashierExtrasServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // 
+        //
     }
 }

@@ -2,12 +2,10 @@
 
 namespace Travoltron\CashierExtras\Commands;
 
-use InvalidArgumentException;
 use Illuminate\Console\Command;
-use Stripe\Stripe as Stripe;
-use Stripe\Plan as StripePlan;
 use Stripe\Coupon as StripeCoupon;
-use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
+use Stripe\Plan as StripePlan;
+use Stripe\Stripe as Stripe;
 
 class MakeTestable extends Command
 {
@@ -66,26 +64,25 @@ class MakeTestable extends Command
         // Test keys are set and appear to be correct
         Stripe::setApiKey(env('STRIPE_TEST_SECRET'));
         StripePlan::create([
-            'amount' => 1000,
+            'amount'   => 1000,
             'interval' => 'month',
-            'name' => 'monthly-10-1',
+            'name'     => 'monthly-10-1',
             'currency' => 'usd',
-            'id' => 'monthly-10-1'
+            'id'       => 'monthly-10-1',
         ]);
         StripePlan::create([
-            'amount' => 1000,
+            'amount'   => 1000,
             'interval' => 'month',
-            'name' => 'monthly-10-2',
+            'name'     => 'monthly-10-2',
             'currency' => 'usd',
-            'id' => 'monthly-10-2'
+            'id'       => 'monthly-10-2',
         ]);
         StripeCoupon::create([
             'amount_off' => 500,
-            'duration' => 'once',
-            'currency' => 'usd',
-            'id' => 'coupon-1'
+            'duration'   => 'once',
+            'currency'   => 'usd',
+            'id'         => 'coupon-1',
         ]);
         $this->info('Successfully created plans and coupons for testing.');
-        return;
     }
 }

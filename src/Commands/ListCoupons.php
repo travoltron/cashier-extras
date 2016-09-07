@@ -3,11 +3,9 @@
 namespace Travoltron\CashierExtras\Commands;
 
 use Carbon\Carbon;
-use InvalidArgumentException;
-use Stripe\Stripe as Stripe;
-use Stripe\Coupon as StripeCoupon;
 use Illuminate\Console\Command;
-use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
+use Stripe\Coupon as StripeCoupon;
+use Stripe\Stripe as Stripe;
 
 class ListCoupons extends Command
 {
@@ -46,7 +44,7 @@ class ListCoupons extends Command
         // Check that the keys are set
         $valid = [
             'test' => true,
-            'live' => true
+            'live' => true,
         ];
         // Check that the keys are set correctly
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') === false && stristr(env('STRIPE_TEST_SECRET'), '_test_') === false) {
@@ -64,30 +62,31 @@ class ListCoupons extends Command
             $this->info('Stripe live keys are correctly set.');
         }
         $envs = collect($valid)->filter(function ($val, $key) {
-                return $val === true;
-            })->keys()->map(function ($keys) {
-                return ucfirst($keys);
-            })->toArray();
-        if(empty($envs)) {
+            return $val === true;
+        })->keys()->map(function ($keys) {
+            return ucfirst($keys);
+        })->toArray();
+        if (empty($envs)) {
             $this->error('Your keys are missing or set incorrectly.');
+
             return;
         }
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
+        Stripe::setApiKey(($env == 'Test') ? env('STRIPE_TEST_SECRET') : env('STRIPE_SECRET'));
         $headers = ['ID', 'Discount', 'Currency', 'Duration', 'Lasts for ', 'Able to be used', 'Has been used', 'Created on'];
         $collection = collect(StripeCoupon::all()->__toArray(true)['data']);
-        if($collection->isEmpty()) {
+        if ($collection->isEmpty()) {
             return $this->info('No coupons found.');
         }
         $i = 0;
-        foreach($collection as $coupon) {
+        foreach ($collection as $coupon) {
             $coupons[$i]['id'] = $coupon['id'];
-            $coupons[$i]['discount'] = ($coupon['amount_off'] !== null)?'$'.$coupon['amount_off']/100:$coupon['percent_off'].'%';
+            $coupons[$i]['discount'] = ($coupon['amount_off'] !== null) ? '$'.$coupon['amount_off'] / 100 : $coupon['percent_off'].'%';
             $coupons[$i]['currency'] = strtoupper($coupon['currency']);
             $coupons[$i]['duration'] = ucfirst($coupon['duration']);
-            $coupons[$i]['repeats'] = ($coupon['duration_in_months'])?str_plural($coupon['duration_in_months']):'Forever';
+            $coupons[$i]['repeats'] = ($coupon['duration_in_months']) ? str_plural($coupon['duration_in_months']) : 'Forever';
             $coupons[$i]['available'] = $coupon['max_redemptions'];
             $coupons[$i]['used'] = $coupon['times_redeemed'];
             $coupons[$i]['created'] = Carbon::createFromTimestamp($coupon['created'])->format('m-d-Y');

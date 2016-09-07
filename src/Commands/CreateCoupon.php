@@ -3,11 +3,9 @@
 namespace Travoltron\CashierExtras\Commands;
 
 use Carbon\Carbon;
-use InvalidArgumentException;
-use Stripe\Stripe as Stripe;
 use Illuminate\Console\Command;
 use Stripe\Coupon as StripeCoupon;
-use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
+use Stripe\Stripe as Stripe;
 
 class CreateCoupon extends Command
 {
@@ -46,7 +44,7 @@ class CreateCoupon extends Command
         // Check that the keys are set
         $valid = [
             'test' => true,
-            'live' => true
+            'live' => true,
         ];
         // Check that the keys are set correctly
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') === false && stristr(env('STRIPE_TEST_SECRET'), '_test_') === false) {
@@ -69,9 +67,9 @@ class CreateCoupon extends Command
             return ucfirst($keys);
         })->toArray();
         $env = $this->choice('Which Stripe environment to use?', $envs);
-        
+
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
+        Stripe::setApiKey(($env == 'Test') ? env('STRIPE_TEST_SECRET') : env('STRIPE_SECRET'));
         $type = $this->choice('Discount type', ['Percentage', 'Fixed Amount']);
         if ($type == 'Percentage') {
             $data['percent_off'] = $this->ask('Percentage discount');
@@ -93,9 +91,8 @@ class CreateCoupon extends Command
             $redeem_by = Carbon::parse($this->ask('When does this coupon expire? (MM-DD-YYYY)'))->timestamp;
         }
         $data['redeem_by'] = $redeem_by;
-        
+
         StripeCoupon::create($data);
         $this->info('Successfully created coupon.');
-        return;
     }
 }

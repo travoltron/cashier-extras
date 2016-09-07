@@ -3,11 +3,9 @@
 namespace Travoltron\CashierExtras\Commands;
 
 use Carbon\Carbon;
-use InvalidArgumentException;
-use Stripe\Stripe as Stripe;
-use Stripe\Plan as StripePlan;
 use Illuminate\Console\Command;
-use Stripe\Error\InvalidRequest as StripeErrorInvalidRequest;
+use Stripe\Plan as StripePlan;
+use Stripe\Stripe as Stripe;
 
 class ListPlans extends Command
 {
@@ -46,7 +44,7 @@ class ListPlans extends Command
         // Check that the keys are set
         $valid = [
             'test' => true,
-            'live' => true
+            'live' => true,
         ];
         // Check that the keys are set correctly
         if (stristr(env('STRIPE_TEST_KEY'), '_test_') === false && stristr(env('STRIPE_TEST_SECRET'), '_test_') === false) {
@@ -64,29 +62,30 @@ class ListPlans extends Command
             $this->info('Stripe live keys are correctly set.');
         }
         $envs = collect($valid)->filter(function ($val, $key) {
-                return $val === true;
-            })->keys()->map(function ($keys) {
-                return ucfirst($keys);
-            })->toArray();
-        if(empty($envs)) {
+            return $val === true;
+        })->keys()->map(function ($keys) {
+            return ucfirst($keys);
+        })->toArray();
+        if (empty($envs)) {
             $this->error('Your keys are missing or set incorrectly.');
+
             return;
         }
         $env = $this->choice('Which Stripe environment to use?', $envs);
 
         // Test keys are set and appear to be correct
-        Stripe::setApiKey(($env == 'Test')?env('STRIPE_TEST_SECRET'):env('STRIPE_SECRET'));
-        
+        Stripe::setApiKey(($env == 'Test') ? env('STRIPE_TEST_SECRET') : env('STRIPE_SECRET'));
+
         $headers = ['ID', 'Name', 'Amount', 'Currency', 'Repeats every', 'Trial length', 'Appears as', 'Created on'];
         $collection = collect(StripePlan::all()->__toArray(true)['data']);
-        if($collection->isEmpty()) {
+        if ($collection->isEmpty()) {
             return $this->info('No plans found.');
         }
         $i = 0;
-        foreach($collection as $plan) {
+        foreach ($collection as $plan) {
             $plans[$i]['id'] = $plan['id'];
             $plans[$i]['name'] = $plan['name'];
-            $plans[$i]['amount'] = money_format('%2n', $plan['amount']/100);
+            $plans[$i]['amount'] = money_format('%2n', $plan['amount'] / 100);
             $plans[$i]['currency'] = $plan['currency'];
             $plans[$i]['repeats'] = $plan['interval_count'].' '.str_plural($plan['interval'], $plan['interval_count']);
             $plans[$i]['trial_period_days'] = $plan['trial_period_days'];

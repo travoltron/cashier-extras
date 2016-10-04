@@ -3,6 +3,7 @@
 namespace Travoltron\CashierExtras\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 

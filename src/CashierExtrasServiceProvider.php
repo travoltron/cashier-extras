@@ -15,6 +15,8 @@ class CashierExtrasServiceProvider extends ServiceProvider
         'Travoltron\CashierExtras\Commands\CreateCoupon',
         'Travoltron\CashierExtras\Commands\ListCoupons',
         'Travoltron\CashierExtras\Commands\DeleteCoupon',
+        'Travoltron\CashierExtras\Commands\StripeMigrations',
+        'Travoltron\CashierExtras\Commands\StripeMigrationsRollback',
     ];
 
     /**

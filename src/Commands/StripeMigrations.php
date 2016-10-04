@@ -3,7 +3,6 @@
 namespace Travoltron\CashierExtras\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class StripeMigrations extends Command
@@ -39,7 +38,6 @@ class StripeMigrations extends Command
      */
     public function handle()
     {
-
         Schema::table('users', function ($table) {
             if (!Schema::hasColumn('users', 'stripe_id')) {
                 $table->string('stripe_id')->nullable();
@@ -68,6 +66,5 @@ class StripeMigrations extends Command
             });
         }
         $this->info('Successfully run migration.');
-        return;
     }
 }

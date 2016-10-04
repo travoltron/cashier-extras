@@ -40,7 +40,12 @@ class StripeMigrationsRollback extends Command
     public function handle()
     {
 
-        \Schema::table('users');
+        \Schema::table('users', function ($table) {
+            $table->dropColumn('stripe_id');
+            $table->dropColumn('card_brand');
+            $table->dropColumn('card_last_four');
+            $table->dropColumn('trial_ends_at');
+        });
         \Schema::dropIfExists('subscriptions');
         $this->info('Successfully rolled back migration.');
         return;

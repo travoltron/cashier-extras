@@ -3,7 +3,6 @@
 namespace Travoltron\CashierExtras\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -41,13 +40,13 @@ class StripeMigrationsRollback extends Command
     public function handle()
     {
 
-        Schema::table('users', function ($table) {
+        \Schema::table('users', function ($table) {
             $table->dropColumn('stripe_id');
             $table->dropColumn('card_brand');
             $table->dropColumn('card_last_four');
             $table->dropColumn('trial_ends_at');
         });
-        Schema::dropIfExists('subscriptions', function ($table) {
+        \Schema::dropIfExists('subscriptions', function ($table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->string('name');

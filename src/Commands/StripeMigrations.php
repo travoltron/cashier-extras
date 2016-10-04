@@ -3,7 +3,6 @@
 namespace Travoltron\CashierExtras\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -40,22 +39,22 @@ class StripeMigrations extends Command
      */
     public function handle()
     {
-        Schema::table('users', function ($table) {
-            if (!Schema::hasColumn('users', 'stripe_id')) {
+        \Schema::table('users', function ($table) {
+            if (!\Schema::hasColumn('users', 'stripe_id')) {
                 $table->string('stripe_id')->nullable();
             }
-            if (!Schema::hasColumn('users', 'card_brand')) {
+            if (!\Schema::hasColumn('users', 'card_brand')) {
                 $table->string('card_brand')->nullable();
             }
-            if (!Schema::hasColumn('users', 'card_last_four')) {
+            if (!\Schema::hasColumn('users', 'card_last_four')) {
                 $table->string('card_last_four')->nullable();
             }
-            if (!Schema::hasColumn('users', 'trial_ends_at')) {
+            if (!\Schema::hasColumn('users', 'trial_ends_at')) {
                 $table->string('trial_ends_at')->nullable();
             }
         });
-        if (Schema::hasTable('subscriptions')) {
-            Schema::create('subscriptions', function ($table) {
+        if (\Schema::hasTable('subscriptions')) {
+            \Schema::create('subscriptions', function ($table) {
                 $table->increments('id');
                 $table->integer('user_id');
                 $table->string('name');

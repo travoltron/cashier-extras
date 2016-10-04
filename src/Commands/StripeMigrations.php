@@ -53,7 +53,7 @@ class StripeMigrations extends Command
                 $table->string('trial_ends_at')->nullable();
             }
         });
-        if (\Schema::hasTable('subscriptions')) {
+        if (!\Schema::hasTable('subscriptions')) {
             \Schema::create('subscriptions', function ($table) {
                 $table->increments('id');
                 $table->integer('user_id');
